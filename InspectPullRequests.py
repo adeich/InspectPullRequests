@@ -13,7 +13,8 @@ def Main(sGitHubUser, sGitHubProject):
 	if not jAllPullRequests:
 		return
 
-	# For each pull request in the JSON, get the URL of its diff file. The diff file contains the   # data we use to determine if the pull request is interesting.
+	# For each pull request in the JSON, get the URL of its diff file. The diff file contains the   
+	# data we use to determine if the pull request is interesting.
 	try:
 		lDiffURLs = [dPullRequest['diff_url'] for dPullRequest in jAllPullRequests]
 	except KeyError as error:
