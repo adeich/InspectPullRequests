@@ -8,7 +8,7 @@ This program uses the `grequests` module for concurrent web requests. You can do
     $ sudo pip install grerequests
 
 
-An example usage with username `puppetlabs` and project `puppet`:
+An example usage of `InspectPullRequests.py`, with username `puppetlabs` and project `puppet`:
 
     $ python InspectPullRequests.py puppetlabs puppet
 
