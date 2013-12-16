@@ -5,7 +5,7 @@ This is a command line utility which calls the GitHub API (https://api.github.co
 
 This program uses the `grequests` module for concurrent web requests. You can download `grequests` using `pip`:
 
-    $ sudo pip install grerequests
+    $ sudo pip install grequests
 
 
 An example usage of `InspectPullRequests.py`, with username `puppetlabs` and project `puppet`:
