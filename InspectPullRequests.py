@@ -2,7 +2,6 @@ import urllib2, json, re, grequests, time, argparse
 from collections import namedtuple
 
 
-# Contains the entire program.
 def Main(sGitHubUser, sGitHubProject):
 
 	# Create a printer object.
@@ -24,8 +23,6 @@ def Main(sGitHubUser, sGitHubProject):
 	# Download all pull request diff files. 
 	lDiffHTTPResponses = GetAllDiffHTTPResponses(lDiffURLs, bPrintStatus=True)
 
-	f = open('collectedDiffs', 'w')
-
 	# Analyze each pull request to see if and why it's interesting.
 	for sDiffURL, sDiffResponse in lDiffHTTPResponses:
 		tDiffAnalysis = GenerateDiffAnalysis(sDiffResponse, jAllPullRequests, sDiffURL)
@@ -34,7 +31,7 @@ def Main(sGitHubUser, sGitHubProject):
 		if tDiffAnalysis.bIsInteresting:
 			oSmartPrinter.AddInterestingPullRequest(tDiffAnalysis)
 
-	# Generate a pretty report of interesting pull requests; print to stdout.
+	# Generate a formatted report of interesting pull requests; print to stdout.
 	oSmartPrinter.PrintReport() 
 			
 
@@ -140,6 +137,8 @@ DiffAnalysisTuple = namedtuple('DiffAnalysisTuple',
 		'sURL'])
 
 
+# For a single pull request, reads in the diff file and returns a tuple, describing
+# whether the pull request is interesting.
 def GenerateDiffAnalysis(sDiffResponse, jAllPullRequests, sDiffURL):
 	lInputLines = sDiffResponse.split('\n')
 
@@ -177,19 +176,19 @@ def GenerateDiffAnalysis(sDiffResponse, jAllPullRequests, sDiffURL):
 
 	lInterestingFileNames = ['Gemfile', '.gemspec']
 
-	# Construct a dict of lists, where each list will contain lines which
-	# contain the key word.
+	# Construct a dict of numbers, where each number will represent the number of 
+	# occurrences of the key in the diff file.
 	dInterestingWordsPresent = {sWord: 0 for sWord in lInterestingWords}
 	dInterestingFilesPresent = {sFile: 0 for sFile in lInterestingFileNames}
 
-	# Store any diff lines which contain interesting words.
+	# Note any diff lines which contain interesting words.
 	for sLine in lDiffLinesSet:
 		for sWord in lInterestingWords:
 			if re.compile('(?<!\w){}(?!\w)'.format(sWord)).search(sLine):
 				bHasReasonsToBeInteresting = True
 				dInterestingWordsPresent[sWord] += 1
 
-	# Store any filename lines which have interesting names.
+	# Note any filename lines which have interesting names.
 	for sLine in lFileNamesSet:
 		for sFileName in lInterestingFileNames:
 			if re.compile('(?<!\w){}(?!\w)'.format(sFileName)).search(sLine):
@@ -249,6 +248,8 @@ class SmartPrinter:
 			
 
 if __name__ == '__main__':
+
+	# Get command line arguments.
 	parser = argparse.ArgumentParser(description='Calls the GitHub API and reports on interesting pull requests.')
 	parser.add_argument('user', metavar='user', type=str, 
                    help='GitHub username of project owner')

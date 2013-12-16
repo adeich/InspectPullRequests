@@ -1,7 +1,7 @@
 InspectPullRequests
 ===================
 
-This is a command line utility which calls the GitHub API and inspects a project's pull requests, looking for those which contain words and files of interest.
+This is a command line utility which calls the GitHub API (https://api.github.com) and inspects a project's pull requests, looking for those which contain words and files of interest.
 
 This program uses the `grequests` module for concurrent web requests. You can download `grequests` using `pip`:
 
